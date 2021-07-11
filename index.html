@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>室温推移</title>
+    <meta http-equiv="content-type" charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><!-- スマホ用の表示拡大 -->
+    <meta name="robots" content="noindex" />
+
+    <link rel="stylesheet" type="text/css" href="css.css">
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "****",
+            authDomain: "****.firebaseapp.com",
+            databaseURL: "****.firebaseio.com",
+            projectId: "****",
+            storageBucket: "****.appspot.com",
+            messagingSenderId: "****",
+            appId: "****"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        let dateList = [];
+        let tempList = [];
+        let humList = [];
+        let presList = [];
+        var db = firebase.firestore();
+        function ListLoad()
+        {
+            var List1 = document.getElementById("List1");
+
+            //データを取得
+            db.collection("Database").get().then((querySnapshot) =>
+            {
+                querySnapshot.forEach((doc) =>
+                {
+                    console.log(`${doc.id} : ${doc.data().Temp} ℃, ${doc.data().Hum} %RH, ${doc.data().Pres} hPa`);
+                    var element = document.createElement("li");
+                    element.innerHTML = doc.id + " : " + doc.data().Temp + "℃, " + doc.data().Hum + "%RH, " + doc.data().Pres + "hPa";
+                    dateList.push(doc.id);
+                    tempList.push(doc.data().Temp);
+                    humList.push(doc.data().Hum);
+                    presList.push(doc.data().Pres);
+                    List1.append(element);
+                });
+            });
+        }
+
+        function drawChart()
+        {
+            var data = new google.visualization.DataTable();
+            data.addColumn('datetime', 'Day'); //横軸は日付形式
+            data.addColumn('number', 'Temp');
+            data.addColumn('number', 'Hum');
+
+            var data1 = new google.visualization.DataTable();
+            data1.addColumn('datetime', 'Day'); //横軸は日付形式
+            data1.addColumn('number', 'Pres');
+
+            for (let i = 0; i < dateList.length; i++)
+            {
+                data.addRows([
+                    [new Date(dateList[i]), parseFloat(tempList[i]), parseFloat(humList[i])] //文字列はparseする
+                ]);
+                data1.addRows([
+                    [new Date(dateList[i]), parseFloat(presList[i])] //文字列はparseする
+                ]);
+            }
+
+            var options = {
+                chart: {
+                    title: 'Mesurement with Raspberrypi',
+                    subtitle: 'Tempaature and Humidity'
+                },
+                width: 900,
+                height: 500
+            };
+            var options1 = {
+                chart: {
+                    subtitle: 'Atmospheric pressure'
+                },
+                width: 900,
+                height: 500,
+            };
+
+            var chart = new google.charts.Line(document.getElementById('chart'));
+            chart.draw(data, google.charts.Line.convertOptions(options));
+            var chart1 = new google.charts.Line(document.getElementById('chart1'));
+            chart1.draw(data1, google.charts.Line.convertOptions(options1));
+
+        }
+        window.onload = function ()
+        {
+            ListLoad();
+            setTimeout(function ()
+            {　// 処理の実行に遅延を入れる
+                google.charts.load('current', { 'packages': ['line'] });
+                google.charts.setOnLoadCallback(drawChart);
+            }, 1000); //500ms以上
+        };
+
+    </script>
+</head>
+
+<body>
+    <h1>室温推移</h1>
+    <div id="chart" style="width: 900px; height: 500px"></div>
+    <div id="chart1" style="width: 900px; height: 500px"></div>
+    <form id="form1">
+        <ul id="List1"></ul>
+    </form>
+
+</body>
+
+</html>
