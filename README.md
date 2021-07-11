@@ -1,4 +1,4 @@
-# AirconPi
+# Environment_graph
 
 ## 概要 (Overview)
 
@@ -7,9 +7,9 @@
 
 ## 画面イメージ (ScreenShot)
 
-<img src="image1.jpg">
+<img src="https://github.com/s51517765/Environment_graph/blob/main/image1.jpg">
 
-<img src="image2.jpg">
+<img src="https://github.com/s51517765/Environment_graph/blob/main/image2.jpg">
 
 ## 動作要件 (Requirements)
 
@@ -22,7 +22,7 @@ https://s51517765.hatenadiary.jp/entry/2021/07/12/073000
 
 ## 回路図 (Circuit diagram)
 
-<img src="回路図.png">
+<img src="https://github.com/s51517765/Environment_graph/blob/main/%E5%9B%9E%E8%B7%AF%E5%9B%B3.png">
 
 ## 参考（Reference）
 
