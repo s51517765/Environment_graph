@@ -18,13 +18,13 @@
     <script type="text/javascript">
         // Your web app's Firebase configuration
         var firebaseConfig = {
-            apiKey: "****",
-            authDomain: "****.firebaseapp.com",
-            databaseURL: "****.firebaseio.com",
-            projectId: "****",
-            storageBucket: "****.appspot.com",
-            messagingSenderId: "****",
-            appId: "****"
+            apiKey: "AIzaSyDgZGaH9ditacynEyB7orLGEPHNAzVdEoU",
+            authDomain: "todotest-c0433.firebaseapp.com",
+            databaseURL: "https://todotest-c0433.firebaseio.com",
+            projectId: "todotest-c0433",
+            storageBucket: "todotest-c0433.appspot.com",
+            messagingSenderId: "697454747042",
+            appId: "1:697454747042:web:174bc96df6f0b7f89566fb"
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -50,7 +50,7 @@
                     tempList.push(doc.data().Temp);
                     humList.push(doc.data().Hum);
                     presList.push(doc.data().Pres);
-                    List1.append(element);
+                    List1.prepend(element);
                 });
             });
         }
