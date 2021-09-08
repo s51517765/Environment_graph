@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 import datetime
 import firebase_admin
 from firebase_admin import credentials
@@ -23,7 +26,7 @@ def setTemp(Temp=25, Hum=55, Pres=1000):
     })
 
 
-maxLength = 72
+maxLength = 24*7
 
 
 def resizeDatabase():
@@ -41,6 +44,19 @@ def resizeDatabase():
             deleteDoc(firstDateId)
 
 
+def exportData():
+    filename = 'env_result.txt'
+    output = open(filename, 'a', encoding='utf')
+    ref = db.collection('Database')
+    docs = ref.stream()
+    for doc in docs:
+        output.write(doc.id)
+        for i in doc._data:
+            output.write(" , "+i + " " + doc._data[i])
+        output.write("\n")
+    output.close()
+
+
 def deleteDoc(id):
     db.collection('Database').document(id).delete()
 
@@ -48,11 +64,15 @@ def deleteDoc(id):
 if __name__ == '__main__':
     while(True):
         try:
-            m = datetime.datetime.now().minute
-            if m == 0:
+            now = datetime.datetime.now()
+            if now.minute == 0:
                 setTemp()
                 resizeDatabase()
                 time.sleep(60)
+            if now.weekday() == 5:  # 土曜日
+                if(now.hour == 23 and now.minute == 55):
+                    exportData()
+                    time.sleep(30)
             time.sleep(30)
         except Exception as e:
             print(e)
