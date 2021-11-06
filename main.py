@@ -7,9 +7,12 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import bme280
 import time
+#import os
+import pathlib
 
 # Use a service account
-cred = credentials.Certificate('serviceAccountKey.json')
+path = str(pathlib.Path(__file__).resolve().parent)
+cred = credentials.Certificate(path+"/"+'serviceAccountKey.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
@@ -39,13 +42,13 @@ def resizeDatabase():
         if dataSize == 1:
             firstDateId = doc.id
 
-    if dataSize > maxLength:
+    if dataSize >= maxLength:
         for i in range(dataSize-maxLength):
             deleteDoc(firstDateId)
 
 
 def exportData():
-    filename = 'env_result.txt'
+    filename = path+"/"+"env_result.txt"
     output = open(filename, 'a', encoding='utf')
     ref = db.collection('Database')
     docs = ref.stream()
@@ -69,10 +72,11 @@ if __name__ == '__main__':
                 setTemp()
                 resizeDatabase()
                 time.sleep(60)
-            if now.weekday() == 5:  # 土曜日
-                if(now.hour == 23 and now.minute == 55):
+            if now.weekday() == 5:  # 土曜日5
+                if(now.hour == 23 and now.minute == 5):
                     exportData()
                     time.sleep(30)
             time.sleep(30)
         except Exception as e:
+            print(now)
             print(e)
