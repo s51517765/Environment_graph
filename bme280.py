@@ -148,7 +148,7 @@ def main():
         Temp = "{:.1f}".format(sensor.getTemperature())
         Hum = "{:.1f}".format(sensor.getHumidity())
         #env_result = str(Pres)+"hPa / "+str(Temp)+"deg / "+str(Hum) + "%"
-        # print(env_result)
+        #print(env_result)
         # file = open('env_result.txt', 'a', encoding='utf')  # 追記モードでオープン
         #file.write(str(tdatetime)+", "+Pres + ", "+Temp+", "+Hum+"\n")
     except Exception as e:
