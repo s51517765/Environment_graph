@@ -7,7 +7,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import bme280
 import time
-#import os
+
 import pathlib
 
 # Use a service account
@@ -72,11 +72,11 @@ def exportData():
     docs = ref.stream()
     for doc in docs:
         output.write(doc.id)
-        for i in doc._data:
-            output.write(" , "+i + " " + doc._data[i])
+        output.write(" , Pres " + doc._data["Pres"])
+        output.write(" , Temp " + doc._data["Temp"])
+        output.write(" , Hum " + doc._data["Hum"])
         output.write("\n")
     output.close()
-
 
 def deleteDoc(id):
     db.collection('Database').document(id).delete()

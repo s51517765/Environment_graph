@@ -5,6 +5,19 @@
 ラズパイに接続したBME280で温湿度を測定し、Firebaseを用いてWebに表示します。<br>
 グラフはChart.jsを使用しています。
 
+### 自動起動設定
+```
+$ sudo crontab -e
+xx 4,16 * * * /usr/bin/python3 /home/<acount name>/cron.py
+@reboot sleep 15; /usr/bin/python3 /home/<acount name>/main.py
+
+$ crontab -e
+xx xx * * 5 sh /home/<acount name>/Environment_raw_data/gitPush.sh
+```
+管理者権限でスクリプトmain.pyの起動と、ウォッチドックタイマーcron.pyを起動し、ユーザー権限でraw_dataバックアップスクリプトを起動します。
+
+※ xxは起動時刻の数値
+
 ## 画面イメージ (ScreenShot)
 
 <img src="https://github.com/s51517765/Environment_graph/blob/main/image1.jpg">
@@ -27,6 +40,8 @@ https://s51517765.hatenadiary.jp/entry/2021/07/12/073000
 ## 参考（Reference）
 
 https://developers.google.com/chart/interactive/docs/gallery/linechart
+
+https://github.com/s51517765/Environment_raw_data
 
 ## ライセンス (License)
 
