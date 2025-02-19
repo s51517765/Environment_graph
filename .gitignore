@@ -1,2 +1,4 @@
 serviceAccountKey.json
 cron.py
+env_result.txt
+gitPush.sh

@@ -7,8 +7,8 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import bme280
 import time
-
 import pathlib
+import log
 
 # Use a service account
 path = str(pathlib.Path(__file__).resolve().parent)
@@ -29,6 +29,7 @@ def setTemp(Temp=25, Hum=55, Pres=1000):
         u'Temp': Temp,
     })
 
+lastDate=None
 
 def setTemp_Current(Temp=25, Hum=55, Pres=1000):
     ref = db.collection('Current')
@@ -45,8 +46,15 @@ def setTemp_Current(Temp=25, Hum=55, Pres=1000):
         u'Hum': Hum,
         u'Temp': Temp,
     })
-
-
+    global lastDate
+    if float(Temp)>0 and float(Hum)>0 and float(Pres)>0:  
+        lastDate =Date
+    elif lastDate != None and Date -lastDate > datetime.timedelta(minutes=7):
+        #print(lastDate)
+        log.write_log("last= "+str(lastDate))
+    else:
+        pass
+    #log.write_log(str(Temp)+","+str(Hum)+","+str(Pres))
 maxLength = 24*7
 
 
@@ -78,6 +86,7 @@ def exportData():
         output.write("\n")
     output.close()
 
+
 def deleteDoc(id):
     db.collection('Database').document(id).delete()
 
@@ -92,14 +101,14 @@ if __name__ == '__main__':
                 setTemp_Current()
                 resizeDatabase()
                 time.sleep(60)
-            elif now.minute % 10 == 0:
+            elif now.minute % 2 == 0:
                 setTemp_Current()
                 time.sleep(60)
             if now.weekday() == 5:  # 土曜日5
                 if(now.hour == 23 and now.minute == 5):
                     exportData()
-                    time.sleep(30)
-            time.sleep(30)
+                    time.sleep(60)
+            time.sleep(10)
         except Exception as e:
             print(now)
             print(e)

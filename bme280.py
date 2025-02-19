@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # https://qiita.com/yukataoka/items/8f9046587c978e91f689
+# i2cdetect -y 1 #i2c 認識確認
 
 from smbus2 import SMBus  # pip install smbus2
 import time
@@ -165,4 +166,6 @@ def get_env_loop(inerval=3600):
 
 
 if __name__ == '__main__':
-    get_env_loop()
+    #get_env_loop()
+    t,h,p=main()
+    print(t,h,p)
